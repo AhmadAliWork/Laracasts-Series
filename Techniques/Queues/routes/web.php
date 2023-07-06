@@ -17,8 +17,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
   $user = User::first();
-//  dispatch(new ReconcileAccount($user));
-  # 👆 this and this 👇 are functionally identical
-  ReconcileAccount::dispatch($user); # we cab use this bcoz of the Dispatchable trait in ReconcileAccount class and it is preferable
+  ReconcileAccount::dispatch($user)->onQueue("high"); // REDIS_QUEUE= in env
   return "Finished";
 });
