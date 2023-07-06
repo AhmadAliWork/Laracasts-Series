@@ -31,8 +31,8 @@ class ReconcileAccount implements ShouldQueue
    */
   public function handle(Filesystem $file): void # we can also typehint any dependency e.g. Filesystem here
   {
-    $file->put(public_path("texting.txt"), 'Reconciling: ' . $this->user->name);
-    # 👆  my queues were running so this file not get into the public dir, so we restart the queue and execute it then it worked becoz queus runs in the memeory
+//    throw new \Exception("Woops!"); # php artisan  queue:work --tries=3
+    # we fix the bug and  php artisan queue:retry all
     logger("Reconciling the user. {$this->user->name}");
   }
 }
