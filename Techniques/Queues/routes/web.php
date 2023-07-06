@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
   $user = User::first();
-  dispatch(new ReconcileAccount($user));
+//  dispatch(new ReconcileAccount($user));
+  # 👆 this and this 👇 are functionally identical
+  ReconcileAccount::dispatch($user); # we cab use this bcoz of the Dispatchable trait in ReconcileAccount class and it is preferable
   return "Finished";
 });
