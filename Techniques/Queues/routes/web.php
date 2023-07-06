@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
   $user = User::first();
-  ReconcileAccount::dispatch($user)->onQueue("high"); // REDIS_QUEUE= in env
+  #  php artisan queue:table then migrate and run queue:work so in my db i wll check queues statuses
+  ReconcileAccount::dispatch($user);
+
   return "Finished";
 });
