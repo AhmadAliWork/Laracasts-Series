@@ -1,0 +1,38 @@
+<?php
+
+namespace App\Jobs;
+
+use App\Models\User;
+use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\SerializesModels;
+
+class ReconcileAccount implements ShouldQueue
+{
+  use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+  protected User $user;
+
+  /**
+   * Create a new job instance.
+   */
+  public function __construct(User $user)
+  {
+    //
+    $this->user = $user;
+  }
+
+  /**
+   * Execute the job.
+   */
+  public function handle(Filesystem $file): void # we can also typehint any dependency e.g. Filesystem here
+  {
+    $file->put(public_path("texting.txt"), 'Reconciling: ' . $this->user->name);
+    # 👆  my queues were running so this file not get into the public dir, so we restart the queue and execute it then it worked becoz queus runs in the memeory
+    logger("Reconciling the user. {$this->user->name}");
+  }
+}
