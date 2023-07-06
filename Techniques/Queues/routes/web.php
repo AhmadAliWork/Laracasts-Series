@@ -2,6 +2,7 @@
 
 use App\Jobs\ReconcileAccount;
 use App\Models\User;
+use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,9 +17,35 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-  $user = User::first();
-  #  php artisan queue:table then migrate and run queue:work so in my db i wll check queues statuses
-  ReconcileAccount::dispatch($user);
+  # Pipeline
+  $pipeline = app(Pipeline::class);
 
-  return "Finished";
+  /*
+   * We can send data through some pipelines(some steps) and then we get the result
+   * in this case we pass a string and in through we can pass Classes or callback functions like we did just like middleware we can pass $data and $next request
+   *
+  */
+  $pipeline->send("hello freaking world")
+    ->through([
+      // send data through some series of classes / pipes
+      function ($string, $next) {
+        $string = ucwords($string); // Hello Freaking World
+        return $next($string);
+
+      },
+
+      function ($string, $next) {
+        $string = str_ireplace("freaking", '', $string); // Hello  World
+        return $next($string);
+
+      },
+
+      ReconcileAccount::class // last pip so "Something else" in $string
+    ])
+    ->then(function ($string) {
+      dump($string); // Something else
+    });
+  return "Done";
+
+//  ReconcileAccount::dispatch();
 });

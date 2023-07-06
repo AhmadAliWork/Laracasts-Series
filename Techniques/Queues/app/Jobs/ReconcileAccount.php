@@ -29,10 +29,8 @@ class ReconcileAccount implements ShouldQueue
   /**
    * Execute the job.
    */
-  public function handle(Filesystem $file): void # we can also typehint any dependency e.g. Filesystem here
+  public function handle($string, $next)
   {
-//    throw new \Exception("Woops!"); # php artisan  queue:work --tries=3
-    # we fix the bug and  php artisan queue:retry all
-    logger("Reconciling the user. {$this->user->name}");
+    return $next("Something else");
   }
 }
