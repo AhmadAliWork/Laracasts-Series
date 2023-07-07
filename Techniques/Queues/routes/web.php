@@ -18,18 +18,6 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-
-  $user = User::first();
-
-  $job = new ReconcileAccount($user);
-
-  resolve(Dispatcher::class)->dispatch($job); # OR you can use Bus Facade  👉   \Illuminate\Support\Facades\Bus::dispatch($job);
-  // 👆 this is a Shorthand of this 👇
-  /*$pipeline = new Pipeline((app()));
-
-  $pipeline->send($job)->through([])->then(function () use ($job) {
-    $job->handle();
-  });*/
-
-  return "done";
+  \App\Jobs\SendWelcomeEmail::dispatch();
+  return "Completed";
 });
