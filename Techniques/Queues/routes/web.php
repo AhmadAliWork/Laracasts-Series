@@ -2,6 +2,7 @@
 
 use App\Jobs\ReconcileAccount;
 use App\Models\User;
+use Illuminate\Bus\Dispatcher;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\Route;
 
@@ -17,35 +18,18 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-  # Pipeline
-  $pipeline = app(Pipeline::class);
 
-  /*
-   * We can send data through some pipelines(some steps) and then we get the result
-   * in this case we pass a string and in through we can pass Classes or callback functions like we did just like middleware we can pass $data and $next request
-   *
-  */
-  $pipeline->send("hello freaking world")
-    ->through([
-      // send data through some series of classes / pipes
-      function ($string, $next) {
-        $string = ucwords($string); // Hello Freaking World
-        return $next($string);
+  $user = User::first();
 
-      },
+  $job = new ReconcileAccount($user);
 
-      function ($string, $next) {
-        $string = str_ireplace("freaking", '', $string); // Hello  World
-        return $next($string);
+  resolve(Dispatcher::class)->dispatch($job); # OR you can use Bus Facade  👉   \Illuminate\Support\Facades\Bus::dispatch($job);
+  // 👆 this is a Shorthand of this 👇
+  /*$pipeline = new Pipeline((app()));
 
-      },
+  $pipeline->send($job)->through([])->then(function () use ($job) {
+    $job->handle();
+  });*/
 
-      ReconcileAccount::class // last pip so "Something else" in $string
-    ])
-    ->then(function ($string) {
-      dump($string); // Something else
-    });
-  return "Done";
-
-//  ReconcileAccount::dispatch();
+  return "done";
 });

@@ -11,7 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ReconcileAccount implements ShouldQueue
+class ReconcileAccount
 {
   use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -29,8 +29,8 @@ class ReconcileAccount implements ShouldQueue
   /**
    * Execute the job.
    */
-  public function handle($string, $next)
+  public function handle()
   {
-    return $next("Something else");
+    logger("Reconcile account");
   }
 }
