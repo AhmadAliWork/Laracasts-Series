@@ -18,6 +18,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-  \App\Jobs\SendWelcomeEmail::dispatch();
+  # it takes 100 queues and in the SendWelcomeEmail thier is a sleep method of 3 seonds
+  foreach (range(1, 100) as $item) {
+    \App\Jobs\SendWelcomeEmail::dispatch()
+      //    ->delay(5)
+    ;
+  }
+  # create a new job and we want to prioritize it bcoz 👆 take too much time to execute queue one by one
+  \App\Jobs\ProcessPayment::dispatch()
+  ->onQueue("payment"); # we have to run  php artisan queue:work --queue=payments,default # it will execute payments queues first before it looks at the default queues
+  ;
+
   return "Completed";
 });
