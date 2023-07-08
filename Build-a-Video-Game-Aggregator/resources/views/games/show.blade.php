@@ -1,11 +1,11 @@
 <x-app-layout>
     <div class="max-w-7xl mx-auto px-4">
-        <div class="game-details border-b border-gray-800 pb-12 flex">
+        <div class="game-details border-b border-gray-800 pb-12 flex flex-col lg:flex-row">
             <div class="flex-none">
                 <img src="https://tse2.mm.bing.net/th?id=OIP.B5cS_X7tv_zZFfEWXDkP9wAAAA&pid=Api&P=0&h=350" alt="cover">
             </div>
-            <div class="ml-12 mr-64">
-                <h2 class="font-semibold text-4xl">Final Fantasy VII Remake</h2>
+            <div class="lg:ml-12 lg:mr-64">
+                <h2 class="font-semibold text-4xl leading-tight mt-1">Final Fantasy VII Remake</h2>
                 <div class="text-gray-400">
                     <span>Adventure, RPG</span>
                     &middot;
@@ -27,7 +27,16 @@
                         </div>
                         <div class="ml-4 text-xs">Critic <br> Score</div>
                     </div>
-                    <div class="flex items-center ml-12">
+                    <div class="flex items-center mt-4 lg:mt-0 lg:ml-12">
+                        <div class="w-8 h-8 bg-gray-800 rounded-full flex justify-center items-center">
+                            <a href="" class="hover:text-gray-400">a</a>
+                        </div>
+                        <div class="w-8 h-8 bg-gray-800 rounded-full flex justify-center items-center">
+                            <a href="" class="hover:text-gray-400">a</a>
+                        </div>
+                        <div class="w-8 h-8 bg-gray-800 rounded-full flex justify-center items-center">
+                            <a href="" class="hover:text-gray-400">a</a>
+                        </div>
                         <div class="w-8 h-8 bg-gray-800 rounded-full flex justify-center items-center">
                             <a href="" class="hover:text-gray-400">a</a>
                         </div>
@@ -56,7 +65,7 @@
 
         <div class="images-container  pb-12 mt-8">
             <h2 class="text-blue-500 uppercase tracking-wide font-semibold">Images</h2>
-            <div class="grid grid-cols-3 gap-12 mt-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-8">
                 <div>
                     <a href="">
                         <img src="https://tse2.mm.bing.net/th?id=OIP.B5cS_X7tv_zZFfEWXDkP9wAAAA&pid=Api&P=0&h=350" alt="screenshot" class="hover:opacity-75 transition ease-in-out duration-150">
