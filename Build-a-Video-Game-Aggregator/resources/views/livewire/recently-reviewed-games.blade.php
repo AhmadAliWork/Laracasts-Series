@@ -1,5 +1,5 @@
-<div class="recently-reviewed-container space-y-12 mt-8">
-    @foreach($recentlyReviewedGames as $game)
+<div wire:init="loadRecentReviewedGames" class="recently-reviewed-container space-y-12 mt-8">
+    @forelse($recentlyReviewedGames as $game)
         <div class="game bg-gray-800 rounded-lg shadow-md flex px-6 py-6">
             <div class="relative flex-none">
                 <a href="#">
@@ -7,7 +7,7 @@
                          alt="game cover"
                          class="w-48 hover:opacity-75 transition ease-in-out duration-150">
                 </a>
-               @isset($game['rating'])
+                @isset($game['rating'])
                     <div
                         class="absolute bottom-0 right-0 w-16 h-16 bg-gray-900 rounded-full"
                         style="right: -28px; bottom: -20px">
@@ -25,5 +25,9 @@
                 <p class="mt-6 text-gray-400 hidden lg:block"> {{ $game['summary'] }}.</p>
             </div>
         </div>
-    @endforeach
+    @empty
+        <div>
+            Loading
+        </div>
+    @endforelse
 </div>

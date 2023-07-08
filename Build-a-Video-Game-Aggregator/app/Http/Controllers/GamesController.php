@@ -23,8 +23,6 @@ class GamesController extends Controller
 
 
         return view("games.index", [
-            "popularGames" => $this->gameService->popularGames(),
-            "recentlyReviewedGames" => $this->gameService->recentlyReviewedGames(),
             "mostAnticipatedGames" => $this->gameService->mostAnticipatedGames(),
         ]);
     }

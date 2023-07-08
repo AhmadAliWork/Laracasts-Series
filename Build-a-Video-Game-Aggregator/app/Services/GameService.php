@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 class GameService
@@ -22,47 +23,53 @@ class GameService
 
     public function popularGames()
     {
-        return Http::withHeaders([
-            "Client-ID" => env("TWITCH_CLIENT_ID"),
-            "Authorization" => "Bearer " . $this->getAccessToken(),
-        ])->withBody($this->fieldsGamesQuery(
-            before: $this->before,
-            after: $this->after,
-            rating: 5,
-            limit: 12
-        ), "text/plain")
-            ->post("https://api.igdb.com/v4/games")
-            ->json();
+        return Cache::remember('popular-games', 10, function () {
+            return Http::withHeaders([
+                "Client-ID" => env("TWITCH_CLIENT_ID"),
+                "Authorization" => "Bearer " . $this->getAccessToken(),
+            ])->withBody($this->fieldsGamesQuery(
+                before: $this->before,
+                after: $this->after,
+                rating: 5,
+                limit: 12
+            ), "text/plain")
+                ->post("https://api.igdb.com/v4/games")
+                ->json();
+        });
     }
 
     public function recentlyReviewedGames()
     {
-        return Http::withHeaders([
-            "Client-ID" => env("TWITCH_CLIENT_ID"),
-            "Authorization" => "Bearer " . $this->getAccessToken(),
-        ])->withBody($this->fieldsGamesQuery(
-            before: $this->before,
-            after: $this->current,
-            rating: 5,
-            limit: 3,
-        ), "text/plain")
-            ->post("https://api.igdb.com/v4/games")
-            ->json();
+        return Cache::remember('recent-games', 10, function () {
+            return Http::withHeaders([
+                "Client-ID" => env("TWITCH_CLIENT_ID"),
+                "Authorization" => "Bearer " . $this->getAccessToken(),
+            ])->withBody($this->fieldsGamesQuery(
+                before: $this->before,
+                after: $this->current,
+                rating: 5,
+                limit: 3,
+            ), "text/plain")
+                ->post("https://api.igdb.com/v4/games")
+                ->json();
+        });
     }
 
     public function mostAnticipatedGames()
     {
-        return Http::withHeaders([
-            "Client-ID" => env("TWITCH_CLIENT_ID"),
-            "Authorization" => "Bearer " . $this->getAccessToken(),
-        ])->withBody($this->fieldsGamesQuery(
-            before: $this->before,
-            after: $this->afterFourMonths,
-            rating: 5,
-            limit: 4,
-        ), "text/plain")
-            ->post("https://api.igdb.com/v4/games")
-            ->json();
+        return Cache::remember('anticipated-games', 10, function () {
+            return Http::withHeaders([
+                "Client-ID" => env("TWITCH_CLIENT_ID"),
+                "Authorization" => "Bearer " . $this->getAccessToken(),
+            ])->withBody($this->fieldsGamesQuery(
+                before: $this->before,
+                after: $this->afterFourMonths,
+                rating: 5,
+                limit: 4,
+            ), "text/plain")
+                ->post("https://api.igdb.com/v4/games")
+                ->json();
+        });
     }
 
     // same as Most Anticipated games and Coming Soon Will Work on future
@@ -70,16 +77,18 @@ class GameService
 
     private function getAccessToken()
     {
-        try {
-            $response = Http::post("https://id.twitch.tv/oauth2/token?", [
-                "client_id" => env("TWITCH_CLIENT_ID"),
-                "client_secret" => env("TWITCH_CLIENT_SECRET"),
-                "grant_type" => "client_credentials"
-            ])->json();
-            return $response['access_token'];
-        } catch (\Exception $e) {
-            return $e->getMessage();
-        }
+        return Cache::remember('twitch_access_token', Carbon::now()->addHours(1), function () {
+            try {
+                $response = Http::post("https://id.twitch.tv/oauth2/token?", [
+                    "client_id" => env("TWITCH_CLIENT_ID"),
+                    "client_secret" => env("TWITCH_CLIENT_SECRET"),
+                    "grant_type" => "client_credentials"
+                ])->json();
+                return $response['access_token'];
+            } catch (\Exception $e) {
+                return $e->getMessage();
+            }
+        });
     }
 
 
