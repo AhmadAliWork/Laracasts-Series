@@ -26,8 +26,21 @@
             </div>
         </div>
     @empty
-        <div>
-            Loading
+        @foreach(range(1,3) as $skeleton)
+            <div class="game bg-gray-800 rounded-lg shadow-md flex px-6 py-6">
+            <div class="relative flex-none">
+                <div class="bg-gray-700 w-32 lg:w-48 h-40 lg:h-56"></div>
+            </div>
+
+            <div class="ml-12">
+                <a href="" class="inline-block text-lg font-semibold leading-tight text-transparent bg-gray-700 rounded  mt-4">name</a>
+                <div class="mt-8 space-y-4 hidden lg:block">
+                    <span class="text-transparent bg-gray-700 rounded inline-block">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet.</span>
+                    <span class="text-transparent bg-gray-700 rounded inline-block">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet.</span>
+                    <span class="text-transparent bg-gray-700 rounded inline-block">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Lorem ipsum dolor sit amet.</span>
+                </div>
+            </div>
         </div>
+        @endforeach
     @endforelse
 </div>
