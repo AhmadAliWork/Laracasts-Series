@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="max-w-7xl mx-auto px-4">
         <h2 class="text-blue-500 uppercase tracking-wide font-semibold">Popular Games</h2>
-        @include("games.partials.popular-games")
+        @include("games.partials.popular-games", ['popularGames' => range(1, 10)])
         <div class="flex flex-col lg:flex-row my-10">
             <div class="recently-reviewed w-full lg:w-3/4 mr-0 lg:mr-32">
                 <h2 class="text-blue-500 uppercase tracking-wide font-semibold">Recently Reviewed</h2>

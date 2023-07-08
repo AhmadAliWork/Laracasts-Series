@@ -18,6 +18,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::view('/games', 'games.index');
+Route::view('/show', 'games.show');
 
 Route::get('/dashboard', function () {
     return view('dashboard');

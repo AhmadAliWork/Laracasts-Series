@@ -28,9 +28,9 @@
                 </div>
             </div>
 
-            <div class="flex">
+            <div class="flex md:hidden">
                 <!-- Search -->
-                <div x-data="{ showSearch: false }" x-init="showSearch = window.innerWidth <= 640" x-show="showSearch" class="shrink-0 flex items-center">
+                <div  class="shrink-0 flex items-center">
                     <x-search-input />
                 </div>
             </div>
