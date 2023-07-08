@@ -18,7 +18,7 @@
                 <a href="" class="block text-lg font-semibold leading-tight hover:text-gray-400 mt-4">Ahmad is Great
                     Programmer</a>
                 <div class="text-gray-400 mt-1">Playstation 4</div>
-                <p class="mt-6 text-gray-400">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab blanditiis ea
+                <p class="mt-6 text-gray-400 hidden lg:block">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab blanditiis ea
                     facere magni neque nesciunt numquam odit quia repudiandae. Adipisci atque corporis eaque eius et eum
                     excepturi incidunt libero maiores maxime non perferendis reiciendis, rem repellendus sint sit
                     tenetur ut? Beatae, deleniti dicta molestias nostrum quibusdam quos suscipit veritatis
