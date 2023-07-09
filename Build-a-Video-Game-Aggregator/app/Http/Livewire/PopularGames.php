@@ -19,11 +19,26 @@ class PopularGames extends Component
     public function loadPopularGames()
     {
 //        $this->popularGames = (new GameService())->popularGames();
-        $this->popularGames = $this->similarGames ?: (new GameService())->popularGames();
+        # we change $this->popularGames  👉🏻 to $popularGamesUnformated, so we can use logic of blade here
+        $popularGamesUnformated = $this->similarGames ?: (new GameService())->popularGames();
+        $this->popularGames = $this->formatForView($popularGamesUnformated);
     }
 
     public function render()
     {
         return view('livewire.popular-games');
+    }
+
+    private function formatForView($games): array
+    {
+        # we want to use logic of blade here that's why we did this 👇🏻
+        return collect($games)->map(function($game) {
+            return collect($game)->merge([
+               # extra field in each game with our logic
+                "coverImageUrl" =>  str_replace('thumb', 'cover_big', $game['cover']['url']),
+                "rating" =>  isset($game['rating']) ? round($game['rating']) . "%"  :  null,
+                "platforms" => collect($game["platforms"])->pluck("abbreviation")->implode(", ") # PS4, PC, Xbox
+            ]);
+        })->toArray();
     }
 }

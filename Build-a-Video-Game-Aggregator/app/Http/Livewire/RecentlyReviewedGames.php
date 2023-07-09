@@ -12,10 +12,25 @@ class RecentlyReviewedGames extends Component
 
     public function loadRecentReviewedGames()
     {
-        $this->recentlyReviewedGames = (new GameService())->recentlyReviewedGames();
+        $recentlyGamesUnformatted = (new GameService())->recentlyReviewedGames();
+        $this->recentlyReviewedGames = $this->formatForView($recentlyGamesUnformatted);
     }
     public function render()
     {
         return view('livewire.recently-reviewed-games');
     }
+
+    private function formatForView($games): array
+    {
+        # we want to use logic of blade here that's why we did this 👇🏻
+        return collect($games)->map(function($game) {
+            return collect($game)->merge([
+                # extra field in each game with our logic
+                "coverImageUrl" =>  str_replace('thumb', 'cover_big', $game['cover']['url']),
+                "rating" =>  isset($game['rating']) ? round($game['rating']) . "%"  :  null,
+                "platforms" => collect($game["platforms"])->pluck("abbreviation")->implode(", ") # PS4, PC, Xbox
+            ]);
+        })->toArray();
+    }
+
 }
