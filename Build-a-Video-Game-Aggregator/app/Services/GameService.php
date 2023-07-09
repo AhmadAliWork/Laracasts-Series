@@ -23,53 +23,65 @@ class GameService
 
     public function popularGames()
     {
-        return Cache::remember('popular-games', 10, function () {
-            return Http::withHeaders([
-                "Client-ID" => env("TWITCH_CLIENT_ID"),
-                "Authorization" => "Bearer " . $this->getAccessToken(),
-            ])->withBody($this->fieldsGamesQuery(
-                before: $this->before,
-                after: $this->after,
-                rating: 5,
-                limit: 12
-            ), "text/plain")
-                ->post("https://api.igdb.com/v4/games")
-                ->json();
-        });
+        try {
+            return Cache::remember('popular-games', now()->addMinutes(10), function () {
+                return Http::withHeaders([
+                    "Client-ID" => env("TWITCH_CLIENT_ID"),
+                    "Authorization" => "Bearer " . $this->getAccessToken(),
+                ])->withBody($this->fieldsGamesQuery(
+                    before: $this->before,
+                    after: $this->after,
+                    rating: 5,
+                    limit: 12
+                ), "text/plain")
+                    ->post("https://api.igdb.com/v4/games")
+                    ->json();
+            });
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function recentlyReviewedGames()
     {
-        return Cache::remember('recent-games', 10, function () {
-            return Http::withHeaders([
-                "Client-ID" => env("TWITCH_CLIENT_ID"),
-                "Authorization" => "Bearer " . $this->getAccessToken(),
-            ])->withBody($this->fieldsGamesQuery(
-                before: $this->before,
-                after: $this->current,
-                rating: 5,
-                limit: 3,
-            ), "text/plain")
-                ->post("https://api.igdb.com/v4/games")
-                ->json();
-        });
+        try {
+            return Cache::remember('recent-games', now()->addMinutes(10), function () {
+                return Http::withHeaders([
+                    "Client-ID" => env("TWITCH_CLIENT_ID"),
+                    "Authorization" => "Bearer " . $this->getAccessToken(),
+                ])->withBody($this->fieldsGamesQuery(
+                    before: $this->before,
+                    after: $this->current,
+                    rating: 5,
+                    limit: 3,
+                ), "text/plain")
+                    ->post("https://api.igdb.com/v4/games")
+                    ->json();
+            });
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function mostAnticipatedGames()
     {
-        return Cache::remember('anticipated-games', 10, function () {
-            return Http::withHeaders([
-                "Client-ID" => env("TWITCH_CLIENT_ID"),
-                "Authorization" => "Bearer " . $this->getAccessToken(),
-            ])->withBody($this->fieldsGamesQuery(
-                before: $this->before,
-                after: $this->afterFourMonths,
-                rating: 5,
-                limit: 4,
-            ), "text/plain")
-                ->post("https://api.igdb.com/v4/games")
-                ->json();
-        });
+        try {
+            return Cache::remember('anticipated-games', now()->addMinutes(10), function () {
+                return Http::withHeaders([
+                    "Client-ID" => env("TWITCH_CLIENT_ID"),
+                    "Authorization" => "Bearer " . $this->getAccessToken(),
+                ])->withBody($this->fieldsGamesQuery(
+                    before: $this->before,
+                    after: $this->afterFourMonths,
+                    rating: 5,
+                    limit: 4,
+                ), "text/plain")
+                    ->post("https://api.igdb.com/v4/games")
+                    ->json();
+            });
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     // same as Most Anticipated games and Coming Soon Will Work on future
@@ -81,15 +93,19 @@ class GameService
                 similar_games.name, similar_games.rating, similar_games.platforms.abbreviation, similar_games.slug;
                 where slug = \"$slug\";
                 ";
-        return Cache::remember('show-game', 10, function () use ($query) {
-            return Http::withHeaders([
-                "Client-ID" => env("TWITCH_CLIENT_ID"),
-                "Authorization" => "Bearer " . $this->getAccessToken(),
-            ])->withBody(
-                "$query", "text/plain")
-                ->post("https://api.igdb.com/v4/games")
-                ->json();
-        });
+        try {
+            return Cache::remember('show-game', now()->addMinutes(10), function () use ($query) {
+                return Http::withHeaders([
+                    "Client-ID" => env("TWITCH_CLIENT_ID"),
+                    "Authorization" => "Bearer " . $this->getAccessToken(),
+                ])->withBody(
+                    "$query", "text/plain")
+                    ->post("https://api.igdb.com/v4/games")
+                    ->json();
+            });
+        } catch (\Exception $e) {
+            return  $e->getMessage();
+        }
     }
 
     private function getAccessToken()
