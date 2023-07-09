@@ -46,9 +46,12 @@ class GamesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $slug)
     {
-        //
+        $game = current($this->gameService->showGame($slug)); # for first index we use current()
+        $similarGames = $game['similar_games'];
+        abort_if(!$game, 404);
+        return view("games.show", compact('game', 'similarGames'));
     }
 
     /**

@@ -73,7 +73,24 @@ class GameService
     }
 
     // same as Most Anticipated games and Coming Soon Will Work on future
-
+    public function showGame($slug)
+    {
+        $query = "
+                fields name, cover.url, first_release_date, total_rating_count, platforms.abbreviation, rating, slug, involved_companies.company.name,
+                genres.name, aggregated_rating, summary, websites.*, videos.*, screenshots.*, similar_games.cover.url,
+                similar_games.name, similar_games.rating, similar_games.platforms.abbreviation, similar_games.slug;
+                where slug = \"$slug\";
+                ";
+        return Cache::remember('show-game', 10, function () use ($query) {
+            return Http::withHeaders([
+                "Client-ID" => env("TWITCH_CLIENT_ID"),
+                "Authorization" => "Bearer " . $this->getAccessToken(),
+            ])->withBody(
+                "$query", "text/plain")
+                ->post("https://api.igdb.com/v4/games")
+                ->json();
+        });
+    }
 
     private function getAccessToken()
     {
@@ -100,7 +117,7 @@ class GameService
         & (first_release_date >= {$before}
         & first_release_date < {$after}
         & total_rating_count > $rating);
-        sort popularity desc;
+        sort total_rating_count desc;
         limit $limit;
     ";
         return $query;

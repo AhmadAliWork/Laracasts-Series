@@ -2,7 +2,7 @@
     @forelse($popularGames as $game)
         <div class="game mt-8">
             <div class="relative inline-block">
-                <a href="#">
+                <a href="{{ route("games.show", $game["slug"]) }}">
                     <img src="{{ str_replace('thumb', 'cover_big', $game['cover']['url']) }}" alt="game cover"
                          class="hover:opacity-75 transition ease-in-out duration-150">
                 </a>
