@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Services\GameService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+use function PHPUnit\Framework\stringContains;
 
 class GamesController extends Controller
 {
@@ -58,7 +60,7 @@ class GamesController extends Controller
 
     private function formatGameForView(mixed $game)
     {
-        $temp = collect($game)->merge([
+        return collect($game)->merge([
           "coverImageUrl" => str_replace('thumb', 'cover_big', $game['cover']['url']),
           "genres" => collect($game["genres"])->pluck("name")->implode(", "),
           "involvedCompanies" => $game["involved_companies"][0]["company"]["name"],
@@ -71,10 +73,11 @@ class GamesController extends Controller
             "huge" => str_replace('thumb', 'screenshot_big', $screenshot['url'])
           ])->take(9),
             'social' => [
-              "website" => collect($game["websites"])
+              "website" => collect($game["websites"])->first(),
+              "facebook" => collect($game["websites"])->filter(fn ($website) => Str::contains($website["url"], 'facebook'))->first(),
+              "instagram" => collect($game["websites"])->filter(fn ($website) => Str::contains($website["url"], 'instagram'))->first(),
+              "twitter" => collect($game["websites"])->filter(fn ($website) => Str::contains($website["url"], 'twitter'))->first(),
             ],
         ])->toArray();
-        dump($temp);
-        return $temp;
     }
 }
