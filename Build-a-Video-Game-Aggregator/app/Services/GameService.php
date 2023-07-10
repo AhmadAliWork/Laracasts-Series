@@ -94,7 +94,15 @@ class GameService
                 where slug = \"$slug\";
                 ";
         try {
-            return Cache::remember('show-game', now()->addMinutes(10), function () use ($query) {
+          $cacheKey = 'show-game-' . $slug;
+          // Clear cache for previous slug
+          if (Cache::has('show-game')) {
+            $previousSlug = Cache::get('show-game');
+            Cache::forget('show-game-' . $previousSlug);
+          }
+          // Set current slug in cache
+          Cache::put('show-game', $slug);
+            return Cache::remember($cacheKey,15, function () use ($query) {
                 return Http::withHeaders([
                     "Client-ID" => env("TWITCH_CLIENT_ID"),
                     "Authorization" => "Bearer " . $this->getAccessToken(),
