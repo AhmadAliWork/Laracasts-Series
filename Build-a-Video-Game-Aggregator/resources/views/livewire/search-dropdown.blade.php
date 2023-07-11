@@ -12,15 +12,35 @@
               clip-rule="evenodd"/>
     </svg>
   </span>
-  @dump($searchResults)
-  <div class="absolute z-50 bg-gray-800 text-xs rounded w-64 mt-2">
-    <ul>
-      <li class="border-b border-gray-700">
-        <a href="" class="block hover:bg-gray-700 px-3 py-3 flex items-center transaction ease-in-out duration-150 px-3 py-3">
-          <img src="" alt="cover" class="w-10">
-          <span class="ml-4">Game</span>
-        </a>
-      </li>
-    </ul>
-  </div>
+    <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+        <div wire:loading
+            class="h-4 w-4 animate-spin rounded-full border-4 border-solid border-current border-r-transparent"
+            role="status"
+        ></div>
+    </div>
+
+  @if(strlen($search) >= 2)
+        <div class="absolute z-50 bg-gray-800 text-xs rounded w-64 mt-2">
+            @if(count($searchResults) > 0)
+                <ul>
+                    @forelse($searchResults as $search)
+                        <li class="border-b border-gray-700">
+                            <a href="{{ route('games.show', $search['slug']) }}" class="block hover:bg-gray-700 px-3 py-3 flex items-center transaction ease-in-out duration-150 px-3 py-3">
+                                @if(isset($search['cover']))
+                                    <img src="{{str_replace('thumb', 'cover_small', $search['cover']['url'])}}" alt="cover" class="w-10">
+                                @else
+                                    <img src="https://via.placeholder.com/264x352" alt="cover" class="w-10">
+                                @endif
+                                <span class="ml-4">{{$search['name']}}</span>
+                            </a>
+                        </li>
+                    @empty
+
+                    @endforelse
+                </ul>
+            @else
+                <div class="px-3 py-3">No Results Found for {{$search}} ☹ </div>
+            @endif
+        </div>
+  @endif
 </div>

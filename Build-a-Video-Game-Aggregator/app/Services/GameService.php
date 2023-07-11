@@ -115,7 +115,20 @@ class GameService
             return  $e->getMessage();
         }
     }
-
+    public function searchGames($search)
+    {
+        $query =  "search \"$search\"; fields name, cover.url, slug; limit 6;";
+        try {
+                return Http::withHeaders([
+                    "Client-ID" => env("TWITCH_CLIENT_ID"),
+                    "Authorization" => "Bearer " . $this->getAccessToken(),
+                ])->withBody($query, "text/plain")
+                    ->post("https://api.igdb.com/v4/games")
+                    ->json();
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
     private function getAccessToken()
     {
         return Cache::remember('twitch_access_token', Carbon::now()->addHours(1), function () {
