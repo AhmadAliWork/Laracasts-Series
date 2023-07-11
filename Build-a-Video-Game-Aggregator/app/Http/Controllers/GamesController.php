@@ -65,8 +65,8 @@ class GamesController extends Controller
           "genres" => collect($game["genres"])->pluck("name")->implode(", "),
           "involvedCompanies" => $game["involved_companies"][0]["company"]["name"],
           "platforms" => collect($game["platforms"])->pluck("abbreviation")->implode(", "), # PS4, PC, Xbox
-          "memberRating" => array_key_exists("rating", $game) ? round($game['rating']) . "%" : "0%",
-          "criticRating" => array_key_exists("aggregated_rating", $game) ? round($game['aggregated_rating']) . "%" : "0%",
+          "memberRating" => array_key_exists("rating", $game) ? round($game['rating']) : "0%",
+          "criticRating" => array_key_exists("aggregated_rating", $game) ? round($game['aggregated_rating']) : "0%",
           "trailer" => "https://youtube.com/watch/" . $game['videos'][0]['video_id'],
           "screenshots" => collect($game["screenshots"])->map(fn ($screenshot) => [
             "big" =>  str_replace('thumb', 'screenshot_huge', $screenshot['url']),

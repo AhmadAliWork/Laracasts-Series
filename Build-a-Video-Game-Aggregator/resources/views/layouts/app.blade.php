@@ -29,6 +29,7 @@
 
             </footer>
         </div>
+        @stack("scripts")
         @livewireScripts
     </body>
 </html>
