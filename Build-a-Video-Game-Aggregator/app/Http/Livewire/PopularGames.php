@@ -45,7 +45,9 @@ class PopularGames extends Component
                # extra field in each game with our logic
                 "coverImageUrl" =>  str_replace('thumb', 'cover_big', $game['cover']['url']),
                 "rating" =>  isset($game['rating']) ? round($game['rating'])   :  null,
-                "platforms" => collect($game["platforms"])->pluck("abbreviation")->implode(", ") # PS4, PC, Xbox
+                "platforms" => array_key_exists('platforms', $game)
+                    ? collect($game["platforms"])->pluck("abbreviation")->implode(", ") # PS4, PC, Xbox
+                    : null
             ]);
         })->toArray();
     }

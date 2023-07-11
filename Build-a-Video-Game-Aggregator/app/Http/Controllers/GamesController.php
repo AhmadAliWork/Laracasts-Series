@@ -22,28 +22,11 @@ class GamesController extends Controller
      */
     public function index()
     {
-
-
         return view("games.index", [
           "mostAnticipatedGames" => $this->gameService->mostAnticipatedGames(),
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.
@@ -67,7 +50,7 @@ class GamesController extends Controller
           "platforms" => collect($game["platforms"])->pluck("abbreviation")->implode(", "), # PS4, PC, Xbox
           "memberRating" => array_key_exists("rating", $game) ? round($game['rating']) : "0%",
           "criticRating" => array_key_exists("aggregated_rating", $game) ? round($game['aggregated_rating']) : "0%",
-          "trailer" => "https://youtube.com/watch/" . $game['videos'][0]['video_id'],
+          "trailer" => array_key_exists('videos', $game) ?  "https://youtube.com/watch/" . $game['videos'][0]['video_id'] : '',
           "screenshots" => collect($game["screenshots"])->map(fn ($screenshot) => [
             "big" =>  str_replace('thumb', 'screenshot_huge', $screenshot['url']),
             "huge" => str_replace('thumb', 'screenshot_big', $screenshot['url'])
