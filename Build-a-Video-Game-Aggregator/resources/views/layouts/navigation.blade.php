@@ -31,14 +31,14 @@
             <div class="flex md:hidden">
                 <!-- Search -->
                 <div  class="shrink-0 flex items-center">
-                    <x-search-input />
+                    <livewire:search-dropdown/>
                 </div>
             </div>
 
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6">
                 <!-- Search -->
-                <x-search-input  />
+                <livewire:search-dropdown />
                 @auth
                     <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
