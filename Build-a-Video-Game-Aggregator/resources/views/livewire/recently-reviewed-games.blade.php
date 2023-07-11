@@ -2,22 +2,23 @@
     @forelse($recentlyReviewedGames as $game)
         <div class="game bg-gray-800 rounded-lg shadow-md flex px-6 py-6">
             <div class="relative flex-none">
-                <a href="#">
+                <a href="{{$game["slug"]}}">
                     <img src="{{$game["coverImageUrl"]}}"
                          alt="game cover"
                          class="w-48 hover:opacity-75 transition ease-in-out duration-150">
                 </a>
                 @if($game['rating'])
                     <div
+                          id="recent_{{ $game['slug'] }}"
                         class="absolute bottom-0 right-0 w-16 h-16 bg-gray-900 rounded-full"
                         style="right: -28px; bottom: -20px">
-                        <div class="font-semibold text-xs flex justify-center items-center h-full">{{ $game['rating'] }}</div>
+                        <div class="font-semibold text-xs"></div>
                     </div>
                 @endif
             </div>
 
             <div class="ml-12">
-                <a href="" class="block text-lg font-semibold leading-tight hover:text-gray-400 mt-4">{{$game["name"]}}</a>
+                <a href="{{$game["slug"]}}" class="block text-lg font-semibold leading-tight hover:text-gray-400 mt-4">{{$game["name"]}}</a>
                 <div class="text-gray-400 mt-1">
                     {{ $game['platforms'] }}
                 </div>
@@ -43,3 +44,8 @@
         @endforeach
     @endforelse
 </div>
+@push('scripts')
+    @include("_rating", [
+        'event' => "recentGameWithRatingAdded",
+    ])
+@endpush

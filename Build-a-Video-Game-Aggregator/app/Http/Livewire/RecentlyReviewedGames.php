@@ -14,6 +14,14 @@ class RecentlyReviewedGames extends Component
     {
         $recentlyGamesUnformatted = (new GameService())->recentlyReviewedGames();
         $this->recentlyReviewedGames = $this->formatForView($recentlyGamesUnformatted);
+        collect($this->recentlyReviewedGames)->filter(function ($game) {
+            return $game['rating'];
+        })->each(function ($game) {
+            $this->emit("recentGameWithRatingAdded", [
+              'slug' => 'recent_' . $game["slug"],
+              'rating' => $game["rating"] / 100,
+            ]);
+        });
     }
     public function render()
     {
@@ -27,7 +35,7 @@ class RecentlyReviewedGames extends Component
             return collect($game)->merge([
                 # extra field in each game with our logic
                 "coverImageUrl" =>  str_replace('thumb', 'cover_big', $game['cover']['url']),
-                "rating" =>  isset($game['rating']) ? round($game['rating']) . "%"  :  null,
+                "rating" =>  isset($game['rating']) ? round($game['rating'])   :  null,
                 "platforms" => collect($game["platforms"])->pluck("abbreviation")->implode(", ") # PS4, PC, Xbox
             ]);
         })->toArray();
