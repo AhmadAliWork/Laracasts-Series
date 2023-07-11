@@ -22,6 +22,14 @@ class PopularGames extends Component
         # we change $this->popularGames  👉🏻 to $popularGamesUnformated, so we can use logic of blade here
         $popularGamesUnformated = $this->similarGames ?: (new GameService())->popularGames();
         $this->popularGames = $this->formatForView($popularGamesUnformated);
+        collect($this->popularGames)->filter(function ($game) {
+            return $game['rating'];
+        })->each(function ($game) {
+            $this->emit("gameWithRatingAdded", [
+              'slug' => $game["slug"],
+              'rating' => $game["rating"] / 100,
+            ]);
+        });
     }
 
     public function render()

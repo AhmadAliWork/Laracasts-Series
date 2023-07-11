@@ -1,8 +1,11 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // progressbar.js@1.0.0 version is used
-        // Docs: http://progressbarjs.readthedocs.org/en/1.0.0/
-        let memberRatingContainer = document.getElementById("{{ $slug }}");
+      @if($event)
+        Livewire.on('{{$event}}', params => {
+            var memberRatingContainer = document.getElementById(params.slug);
+      @else
+            var memberRatingContainer = document.getElementById("{{ $slug }}");
+      @endif
         var bar = new ProgressBar.Circle(memberRatingContainer, {
             color: 'white',
             // This has to be the same size as the maximum width to
@@ -31,7 +34,11 @@
 
             }
         });
-
-        bar.animate({{ $rating }} / 100);  // Number from 0.0 to 1.0
+        @if($event)
+          bar.animate(params.rating);
+        @else
+          bar.animate({{ $rating }} / 100);
+        @endif
+        @if($event)  }); @endif
     });
 </script>
