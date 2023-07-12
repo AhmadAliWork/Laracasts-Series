@@ -1,4 +1,6 @@
 <x-app-layout>
+    <x-slot:icon> {{ $game["coverImageUrl"]  }} </x-slot>
+    <x-slot:title> {{ $game["name"]  }} </x-slot>
     <div class="max-w-7xl mx-auto px-4">
         <div class="game-details border-b border-gray-800 pb-12 flex flex-col lg:flex-row">
             <div class="flex-none">
@@ -86,25 +88,7 @@
                 <p class="mt-12">
                    {{ $game["summary"] }}
                 </p>
-
-                <div class="mt-12">
-                   {{-- <button class="flex bg-blue-500 text-white font-semibold px-4 py-4 hover:bg-blue-600 rounded transition ease-in-out duration-150">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                             stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"/>
-                        </svg>
-                        <span class="ml-2">Play Trailer</span>
-                    </button>--}}
-                    <a href="{{ $game['trailer'] }}" class="inline-flex bg-blue-500 text-white font-semibold px-4 py-4 hover:bg-blue-600 rounded transition ease-in-out duration-150">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                             stroke="currentColor" class="w-6 h-6">
-                            <path stroke-linecap="round" stroke-linejoin="round"
-                                  d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"/>
-                        </svg>
-                        <span class="ml-2">Play Trailer</span>
-                    </a>
-                </div>
+               @include('games.partials.trailer-model', ['game', $game])
             </div>
         </div>
 
