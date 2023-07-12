@@ -44,12 +44,12 @@ class GamesController extends Controller
     private function formatGameForView(mixed $game)
     {
         return collect($game)->merge([
-          "coverImageUrl" => str_replace('thumb', 'cover_big', $game['cover']['url']),
+          "coverImageUrl" =>  array_key_exists("cover", $game) ? str_replace('thumb', 'cover_big', $game['cover']['url']) : 'https://via.placeholder.com/264x352',
           "genres" => collect($game["genres"])->pluck("name")->implode(", "),
-          "involvedCompanies" => $game["involved_companies"][0]["company"]["name"],
+          "involvedCompanies" => array_key_exists("involved_companies", $game) ? $game["involved_companies"][0]["company"]["name"] : "No Company yet",
           "platforms" => collect($game["platforms"])->pluck("abbreviation")->implode(", "), # PS4, PC, Xbox
-          "memberRating" => array_key_exists("rating", $game) ? round($game['rating']) : "0%",
-          "criticRating" => array_key_exists("aggregated_rating", $game) ? round($game['aggregated_rating']) : "0%",
+          "memberRating" => array_key_exists("rating", $game) ? round($game['rating']) : 0,
+          "criticRating" => array_key_exists("aggregated_rating", $game) ? round($game['aggregated_rating']) : 0,
           "trailer" => array_key_exists('videos', $game) ?  "https://youtube.com/embed/" . $game['videos'][0]['video_id'] : '',
           "screenshots" => collect($game["screenshots"])->map(fn ($screenshot) => [
             "big" =>  str_replace('thumb', 'screenshot_huge', $screenshot['url']),
