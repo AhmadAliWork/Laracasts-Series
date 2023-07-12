@@ -1,9 +1,26 @@
-<div class="relative">
+<div class="relative"
+      x-data="{
+          isVisible: true
+      }"
+     @click.away="isVisible = false"
+>
   <input
     wire:model.debounce.300ms="search"
     type="search"
     class="border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:border-indigo-500 dark:focus:border-indigo-600 focus:ring-indigo-500 dark:focus:ring-indigo-600 shadow-sm bg-gray-800 text-sm rounded-full focus:outline-none focus:shadow-outline w-64 px-3 py-1 pl-8"
-    placeholder="Search...">
+    placeholder="Search (Press '/' to focus)"
+    x-ref="search"
+    @keydown.window="
+      if (event.keyCode === 191) {
+      event.preventDefault();
+      $refs.search.focus();
+      }
+    "
+    @focus="isVisible = true"
+    @keydown.escape.window="isVisible = false"
+    @keydown="isVisible = true"
+    @keydown.shift.tab="isVisible = false"
+  >
   <span class="absolute top-0 flex items-center h-full ml-2">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
          class=" text-gray-400 w-4 h-4">
@@ -20,12 +37,17 @@
     </div>
 
   @if(strlen($search) >= 2)
-        <div class="absolute z-50 bg-gray-800 text-xs rounded w-64 mt-2">
+        <div class="absolute z-50 bg-gray-800 text-xs rounded w-64 mt-2" x-show.transition.opacity.duration.200="isVisible">
             @if(count($searchResults) > 0)
                 <ul>
                     @forelse($searchResults as $search)
                         <li class="border-b border-gray-700">
-                            <a href="{{ route('games.show', $search['slug']) }}" class="block hover:bg-gray-700 px-3 py-3 flex items-center transaction ease-in-out duration-150 px-3 py-3">
+
+                            <a href="{{ route('games.show', $search['slug']) }}" class="block hover:bg-gray-700 px-3 py-3 flex items-center transaction ease-in-out duration-150 px-3 py-3"
+                            @if($loop->last) {{-- on last result when we press tab the dropdown hide--}}
+                              @keydown.tab="isVisible = false"
+                            @endif
+                            >
                                 @if(isset($search['cover']))
                                     <img src="{{str_replace('thumb', 'cover_small', $search['cover']['url'])}}" alt="cover" class="w-10">
                                 @else
