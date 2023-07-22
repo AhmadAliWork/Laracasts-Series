@@ -24,6 +24,7 @@ class GamesController extends Controller
     {
         return view("games.index", [
           "mostAnticipatedGames" => $this->gameService->mostAnticipatedGames(),
+          "comingSoonGames" => $this->gameService->comingSoonGames(),
         ]);
     }
 

@@ -84,7 +84,29 @@ class GameService
         }
     }
 
-    // same as Most Anticipated games and Coming Soon Will Work on future
+    public function comingSoonGames()
+    {
+        $query = "
+            fields name, cover.url, first_release_date, total_rating_count, platforms.abbreviation, rating, slug, summary;
+            where platforms = (48,49,130,6)
+            & (first_release_date >= {$this->current});
+            sort first_release_date asc;
+            limit 4;
+        ";
+        try {
+            return Cache::remember('coming_soon-games', now()->addMinutes(10), function () use ($query) {
+                return Http::withHeaders([
+                    "Client-ID" => env("TWITCH_CLIENT_ID"),
+                    "Authorization" => "Bearer " . $this->getAccessToken(),
+                ])->withBody("$query", "text/plain")
+                    ->post("https://api.igdb.com/v4/games")
+                    ->json();
+            });
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
+    }
+
     public function showGame($slug)
     {
         $query = "
