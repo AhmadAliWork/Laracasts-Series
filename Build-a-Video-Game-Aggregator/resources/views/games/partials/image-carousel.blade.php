@@ -10,7 +10,7 @@
 >
     <h2 class="text-blue-500 uppercase tracking-wide font-semibold">Images</h2>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-8 owl-carousel owl-theme">
-        @foreach($game["screenshots"] as $screenshot)
+        @forelse($game["screenshots"] as $screenshot)
             <div class="item">
                 <a href="{{ $screenshot["huge"]  }}"
                    @click.prevent="
@@ -21,7 +21,9 @@
                     <img src="{{ $screenshot["big"] }}" alt="screenshot" class="hover:opacity-75 transition ease-in-out duration-150">
                 </a>
             </div>
-        @endforeach
+        @empty
+            <h2>No Screen Shots Found ☹</h2>
+        @endforelse
     </div>
     <template x-if="isImageModalVisible">
         <div

@@ -81,7 +81,7 @@
 
                 </div>
                 <p class="mt-12">
-                   {{ $game["summary"] }}
+                   {{ $game["summary"] ?? '' }}
                 </p>
                @include('games.partials.trailer-model', ['game', $game])
             </div>
