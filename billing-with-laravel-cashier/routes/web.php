@@ -25,4 +25,18 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    Route::get('/subscribe', function () {
+        return view('subscribe', [
+          'intent' => auth()->user()->createSetupIntent()
+        ]);
+    })->name('subscribe');
+
+    Route::post('/subscribe', function (\Illuminate\Http\Request $request) {
+        auth()->user()->newSubscription(
+          'cashier', $request->plan
+        )->create($request->paymentMethod);
+
+        return redirect()->route('dashboard');
+    })->name('subscribe.post');
 });
