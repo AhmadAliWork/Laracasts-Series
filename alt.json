@@ -1,0 +1,17 @@
+{
+  "posts" : [
+    {
+      "title" : "My First Post",
+      "author" : "Ahmad Ali"
+    },
+    {
+      "title" : "My Another Post",
+      "author" : "Ahmad Ali"
+    }
+  ],
+  "profile": {
+    "first_name" : "Ahmad",
+    "last_name" : "Ali",
+    "email" : "ahmad@mail.com"
+  }
+}

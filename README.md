@@ -7,3 +7,29 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
+
+
+
+## Docker File
+
+```bash
+docker build . --no-cache -t json-server
+```
+
+Run Our Server (it refers to `db.json` file) 
+```bash
+docker run --rm -p 3000:3000  json-server
+```
+Container down
+```bash
+docker ps
+docker stop <CONTAINER ID>
+```
+Re-run and specify json file
+
+```bash
+docker run --rm -p 3000:3000 json-server alt.json
+```
+
+
+

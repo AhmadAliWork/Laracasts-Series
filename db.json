@@ -1,0 +1,17 @@
+{
+  "posts" : [
+    {
+      "title" : "My Cool Post",
+      "author" : "Muhammad Ali"
+    },
+    {
+      "title" : "My Recent Post",
+      "author" : "Muhammad Ali"
+    }
+  ],
+  "profile": {
+    "first_name" : "Muhammad",
+    "last_name" : "Ali",
+    "email" : "ali@mail.com"
+  }
+}
