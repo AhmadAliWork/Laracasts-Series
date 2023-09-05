@@ -1,18 +1,14 @@
-FROM node:latest
+FROM nginx:stable-alpine
 
-# Setting up work directory
-WORKDIR /home/server
+ENV NGNIXUSER=laravel
+ENV NGNIXGROUP=laravel
 
-# Install json server
-RUN npm install -g json-server
+RUN mkdir -p /var/www/html/public
 
-# copy local files to docker working directory
-COPY db.json /home/server/db.json
+# copy local file of nginx
+ADD nginx/default.conf /etc/nginx/conf.d/default.conf
 
-COPY alt.json /home/server/alt.json
+# s/ means (substitute command and string to find (user www-data) and string to replace(user laravel) )
+RUN sed -i "s/user www-data/user ${NGNIXUSER}/g" /etc/nginx/nginx.conf
 
-EXPOSE 3000
-# CMD and Enterypoint command are use to execute the commands
-ENTRYPOINT ["json-server", "---host", "0.0.0.0"]
-
-CMD ["db.json"]
+RUN adduser -g ${NGNIXGROUP} -s bin/sh -D ${NGNIXUSER}

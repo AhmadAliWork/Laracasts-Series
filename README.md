@@ -33,3 +33,26 @@ docker run --rm -p 3000:3000 json-server alt.json
 
 
 
+### Setup Nginx
+```bash
+docker build --no-cache -t laravel-nginx .
+```
+Run server
+```bash
+docker run --rm -p 80:80 laravel-nginx
+```
+it gives 403 forbidden error because it cannot find src directory, so we create Volumes 
+```bash
+mkdir src
+touch src/index.html
+```
+`src/index.html`
+```html
+<h1>Hello From Nginx Container</h1>
+```
+Run again with path of directory
+```bash
+docker run --rm -p 80:80 -v /home/ahmadalii/Desktop/My\ Data/LARACAST-SERIES/src:/var/www/html/public laravel-nginx
+```
+
+
